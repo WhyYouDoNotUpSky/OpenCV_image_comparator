@@ -141,7 +141,7 @@ Java_io_weichao_opencv_util_CompareUtil_nativeComparePH(JNIEnv *env, jclass, jlo
     Mat &mat1 = *(Mat *) addr1;
     Mat &mat2 = *(Mat *) addr2;
     if (!mat1.data || !mat2.data) {
-        return 0j;
+        return (jlong)0;
     }
 
     jlong distance1 = calHammingDistance(mat1);

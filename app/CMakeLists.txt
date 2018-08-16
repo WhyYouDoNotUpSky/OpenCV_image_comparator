@@ -6,9 +6,9 @@ set(CMAKE_VERBOSE_MAKEFILE on)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
 
 # 工程路径
-set(pathToProject D:/Android/workspace/OpenCV_image_comparator)
+set(pathToProject /Users/Yellow/GithubProject/OpenCV_image_comparator)
 # OpenCV-android-sdk路径
-set(pathToOpenCv D:/OpenCV-android-sdk)
+set(pathToOpenCv /Users/Yellow/GithubProject/OpenCV-android-sdk)
 
 # 配置加载native依赖
 include_directories(${pathToOpenCv}/sdk/native/jni/include)
