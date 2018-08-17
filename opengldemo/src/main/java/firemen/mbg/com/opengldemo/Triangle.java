@@ -55,18 +55,19 @@ public class Triangle {
     // 典型的，你必须定义以下几个东西：
     //VertexShader-用于渲染形状的顶点的OpenGLES 图形代码。
     private final String vertexShaderCode =
-            "attribute vec4 vPosition;" +
+                    "uniform mat4 uMVPMatrix;" +
+                    "attribute vec4 vPosition;" +
                     "void main() {" +
-                    "  gl_Position = vPosition;" +
+                    "  gl_Position = uMVPMatrix * vPosition;" +
                     "}";
     //FragmentShader-用于渲染形状的外观（颜色或纹理）的OpenGLES 代码。
     private final String fragmentShaderCode =
-            "precision mediump float;" +
+                    "precision mediump float;" +
                     "uniform vec4 vColor;" +
                     "void main() {" +
                     "  gl_FragColor = vColor;" +
                     "}";
-
+    private int mMVPMatrixHandle;
     public static int loadShader(int type, String shaderCode) {
 
         // 创建一个vertex shader类型(GLES20.GL_VERTEX_SHADER)
@@ -85,7 +86,7 @@ public class Triangle {
 
     private final int vertexCount = triangleCoords.length / COORDS_PER_VERTEX;
     private final int vertexStride = COORDS_PER_VERTEX * 4; // 4 bytes per vertex
-    public void draw() {
+    public void draw(float[] mvpMatrix) {
         // 将program加入OpenGL ES环境中
         GLES20.glUseProgram(mProgram);
 
@@ -105,6 +106,12 @@ public class Triangle {
 
         // 设置三角形的颜色
         GLES20.glUniform4fv(mColorHandle, 1, color, 0);
+
+        // 获得形状的变换矩阵的handle
+        mMVPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
+
+        // 应用投影和视口变换
+        GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mvpMatrix, 0);
 
         // 画三角形
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertexCount);
