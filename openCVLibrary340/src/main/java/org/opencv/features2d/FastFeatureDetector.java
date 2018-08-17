@@ -28,6 +28,15 @@ public class FastFeatureDetector extends Feature2D {
     //
 
     //javadoc: FastFeatureDetector::create(threshold, nonmaxSuppression, type)
+    //static Ptr<FastFeatureDetector>
+    // create(int threshold=10, bool nonmaxSuppression=true,int type=FastFeatureDetector::TYPE_9_16 );
+//    threshold是指比较时边缘轨迹点和中心点的差值,也就是第三步的阈值t,
+// nonmaxSuppression代表是否使用第五步非极大值抑制,如果发现fast检测的结果有聚簇情况,那么可以考虑采用
+// ,第三个参数type的取值来自于FastFeatureDetector枚举,有如下取值:
+//
+//    TYPE_5_8 从轨迹中取8个点,当有5个点满足条件,就是特征点.
+//    TYPE_7_12 取轨迹12个点,7个满足条件,就是特征点.
+//    TYPE_9_16 取轨迹16个点,当9个满足条件,就是特征点.
     public static FastFeatureDetector create(int threshold, boolean nonmaxSuppression, int type)
     {
         

@@ -245,7 +245,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mTv.setText(stringBuilder.toString());
 
-        Mat matchesMat = CompareUtil.matches(mat1, mat2);
+//        Mat matchesMat = CompareUtil.matches(mat1, mat2);
+        Mat matchesMat = CompareUtil.drawKeyPoint(mat1);
         Bitmap matchesBitmap = Bitmap.createBitmap(matchesMat.cols(), matchesMat.rows(), Bitmap.Config.ARGB_8888);
         BitmapUtil.matToBitmap(matchesMat, matchesBitmap);
         mMatchesIv.setImageBitmap(matchesBitmap);

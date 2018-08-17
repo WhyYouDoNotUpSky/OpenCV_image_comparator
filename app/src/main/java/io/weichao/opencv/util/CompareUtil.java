@@ -5,11 +5,13 @@ import android.util.Log;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.DMatch;
+import org.opencv.core.KeyPoint;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfDMatch;
 import org.opencv.core.MatOfKeyPoint;
 import org.opencv.features2d.DescriptorExtractor;
 import org.opencv.features2d.DescriptorMatcher;
+import org.opencv.features2d.FastFeatureDetector;
 import org.opencv.features2d.FeatureDetector;
 import org.opencv.features2d.Features2d;
 import org.opencv.imgproc.Imgproc;
@@ -114,7 +116,7 @@ public class CompareUtil {
         /* 获取matches */
         MatOfKeyPoint matOfKeyPoint1 = new MatOfKeyPoint();
         MatOfKeyPoint matOfKeyPoint2 = new MatOfKeyPoint();
-        FeatureDetector featureDetector = FeatureDetector.create(FeatureDetector.ORB);
+        FastFeatureDetector featureDetector = FastFeatureDetector.create();
         featureDetector.detect(thresholdMat1, matOfKeyPoint1);
         featureDetector.detect(thresholdMat2, matOfKeyPoint2);
 
@@ -152,6 +154,54 @@ public class CompareUtil {
         // 将匹配线绘制到图像上
 //        Features2d.drawMatches(thresholdMat1, matOfKeyPoint1, thresholdMat2, matOfKeyPoint2, goodMatches, outputMat);
         Features2d.drawMatches(rgbMat1, matOfKeyPoint1, rgbMat2, matOfKeyPoint2, goodMatches, outputMat);
+        //画单张图片的特征点
+//        Features2d.drawKeypoints(rgbMat1,matOfKeyPoint1,outputMat);
+        return outputMat;
+    }
+
+    public static Mat drawKeyPoint(Mat mat1){
+        if (mat1.empty() ) {
+            Log.e(TAG, "mat1.empty() ");
+            return null;
+        }
+
+        Mat mat1Copy = mat1.clone();
+
+        // 转灰度图
+        Mat grayMat1 = new Mat();
+        Imgproc.cvtColor(mat1Copy, grayMat1, Imgproc.COLOR_BGR2GRAY);
+
+        // 二值化处理
+        Mat thresholdMat1 = new Mat();
+        Imgproc.threshold(grayMat1, thresholdMat1, 50, 255, Imgproc.THRESH_BINARY);
+
+        Log.e(TAG, "featureDetector.detect-start");
+        /* 获取matches */
+        MatOfKeyPoint matOfKeyPoint1 = new MatOfKeyPoint();
+        FastFeatureDetector featureDetector = FastFeatureDetector.create(
+                FastFeatureDetector.THRESHOLD,
+                false,
+                FastFeatureDetector.TYPE_7_12);
+        featureDetector.detect(thresholdMat1, matOfKeyPoint1);
+        KeyPoint[] keyPoints = matOfKeyPoint1.toArray();
+        Log.e(TAG, "featureDetector.detect-end");
+        Mat descriptorMat1 = new Mat();
+        DescriptorExtractor descriptorExtractor = DescriptorExtractor.create(DescriptorExtractor.ORB);
+        descriptorExtractor.compute(thresholdMat1, matOfKeyPoint1, descriptorMat1);
+        /* 获取matches */
+
+        // 将图片格式转成API需要的格式
+        Mat rgbMat1 = new Mat();
+        Imgproc.cvtColor(mat1Copy, rgbMat1, Imgproc.COLOR_RGBA2RGB, 1);
+
+        // 联合两张图片，拼成一张
+        Mat outputMat = new Mat();
+
+        // 将匹配线绘制到图像上
+//        Features2d.drawMatches(thresholdMat1, matOfKeyPoint1, thresholdMat2, matOfKeyPoint2, goodMatches, outputMat);
+//        Features2d.drawMatches(rgbMat1, matOfKeyPoint1, rgbMat2, matOfKeyPoint2, goodMatches, outputMat);
+        //画单张图片的特征点
+        Features2d.drawKeypoints(rgbMat1,matOfKeyPoint1,outputMat);
         return outputMat;
     }
 }
