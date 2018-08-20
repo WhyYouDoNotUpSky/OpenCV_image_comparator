@@ -18,7 +18,7 @@ public class DemoGLSurfaceView extends GLSurfaceView {
 
     private void init(Context context) {
         setEGLContextClientVersion(2);
-        setRenderer(new DemoRender());
+        setRenderer(new PointRenderer());
         // 只有在绘制数据改变时才绘制view
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
     }

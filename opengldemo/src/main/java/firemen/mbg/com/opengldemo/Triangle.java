@@ -54,14 +54,14 @@ public class Triangle {
     //    使用OpenGLES 2.0画一个定义好的形状需要一大坨代码，因为你必须为图形渲染管线提供一大堆信息。
     // 典型的，你必须定义以下几个东西：
     //VertexShader-用于渲染形状的顶点的OpenGLES 图形代码。
-    private final String vertexShaderCode =
+    public static final String vertexShaderCode =
                     "uniform mat4 uMVPMatrix;" +
                     "attribute vec4 vPosition;" +
                     "void main() {" +
                     "  gl_Position = uMVPMatrix * vPosition;" +
                     "}";
     //FragmentShader-用于渲染形状的外观（颜色或纹理）的OpenGLES 代码。
-    private final String fragmentShaderCode =
+    public static final String fragmentShaderCode =
                     "precision mediump float;" +
                     "uniform vec4 vColor;" +
                     "void main() {" +
